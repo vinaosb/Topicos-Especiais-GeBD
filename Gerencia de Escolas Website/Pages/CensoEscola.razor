@@ -1,0 +1,41 @@
+﻿@page "/censoescola"
+
+@using API.SQL.Models
+@inject Data.CensoEscolasService CEService
+
+<h1>CensoEscola</h1>
+
+@if (censosEscolas == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Codigo da Entidade</th>
+				<th>Ano</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var modelItem in censosEscolas)
+			{
+				<tr>
+					<td>@modelItem.CodEntidade</td>
+					<td>@modelItem.Ano</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	API.SQL.Models.CensoEscola[] censosEscolas;
+
+	protected override async Task OnInitializedAsync()
+	{
+		censosEscolas = await CEService.GetAsync();
+	}
+}
