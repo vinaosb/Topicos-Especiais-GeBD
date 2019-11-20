@@ -38,7 +38,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		censosEscolas = await EService.GetAsync();
+		censosEscolas = await EService.GetAsync(null);
 	}
 
 	private void NavigateToCensoEscola(string text)

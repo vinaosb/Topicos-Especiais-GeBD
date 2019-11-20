@@ -24,9 +24,13 @@ namespace Gerencia_de_Escolas_Website.Data
 				new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 
-		public async Task<CensoEscola[]> GetAsync()
+		public async Task<CensoEscola[]> GetAsync(string? text)
 		{
-			var response = await client.GetAsync("CensoEscolas");
+			HttpResponseMessage response;
+			if (string.IsNullOrEmpty(text))
+				response = await client.GetAsync("CensoEscolas");
+			else
+				response = await client.GetAsync("CensoEscolas/" + text);
 
 			if (response.IsSuccessStatusCode)
 			{
