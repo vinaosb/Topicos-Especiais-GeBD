@@ -92,8 +92,6 @@ namespace API.SQL.Models
 
 				entity.Property(e => e.SituacaoFuncionamento).HasColumnName("situacao_funcionamento");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
-
 				entity.HasOne(d => d.CodEntidadeNavigation)
 					.WithMany(p => p.CensoEscola)
 					.HasForeignKey(d => d.CodEntidade)
@@ -116,7 +114,7 @@ namespace API.SQL.Models
 					.IsRequired()
 					.HasColumnName("email");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodEntidadeNavigation)
 					.WithMany(p => p.CorreioEletronico)
@@ -162,7 +160,7 @@ namespace API.SQL.Models
 					.IsRequired()
 					.HasColumnName("numero");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodMunicipioNavigation)
 					.WithMany(p => p.Endereco)
@@ -198,7 +196,7 @@ namespace API.SQL.Models
 					.IsRequired()
 					.HasColumnName("nome");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodEnderecoNavigation)
 					.WithMany(p => p.Escola)
@@ -230,7 +228,7 @@ namespace API.SQL.Models
 					.HasMaxLength(2)
 					.IsFixedLength();
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodRegiaoNavigation)
 					.WithMany(p => p.Estado)
@@ -260,7 +258,7 @@ namespace API.SQL.Models
 
 				entity.Property(e => e.SistemsSSesi).HasColumnName("sistems_s_sesi");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodEntidadeNavigation)
 					.WithOne(p => p.MantenedoraDaEscola)
@@ -288,7 +286,7 @@ namespace API.SQL.Models
 
 				entity.Property(e => e.PkCodMunicipioOld).HasColumnName("pk_cod_municipio_old");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodEstadoNavigation)
 					.WithMany(p => p.Municipio)
@@ -312,7 +310,7 @@ namespace API.SQL.Models
 					.IsRequired()
 					.HasColumnName("nome_regiao");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 			});
 
 			modelBuilder.Entity<Telefone>(entity =>
@@ -332,7 +330,7 @@ namespace API.SQL.Models
 
 				entity.Property(e => e.Fax).HasColumnName("fax");
 
-				entity.Property(e => e.Id).HasColumnName("IdBlockchain");
+				
 
 				entity.HasOne(d => d.CodEntidadeNavigation)
 					.WithMany(p => p.Telefone)

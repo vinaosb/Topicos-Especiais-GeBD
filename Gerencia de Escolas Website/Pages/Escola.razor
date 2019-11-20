@@ -6,7 +6,7 @@
 
 <h1>CensoEscola</h1>
 
-@if (censosEscolas == null)
+@if (escolas == null)
 {
 	<p><em>Loading...</em></p>
 }
@@ -20,7 +20,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var modelItem in censosEscolas)
+			@foreach (var modelItem in escolas)
 			{
 				<tr>
 					<td>@modelItem.CodEntidade</td>
@@ -34,11 +34,11 @@ else
 
 
 @code {
-	API.SQL.Models.Escola[] censosEscolas;
+	API.SQL.Models.Escola[] escolas;
 
 	protected override async Task OnInitializedAsync()
 	{
-		censosEscolas = await EService.GetAsync(null);
+		escolas = await EService.GetAsync();
 	}
 
 	private void NavigateToCensoEscola(string text)
