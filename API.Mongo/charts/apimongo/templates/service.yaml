@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "apimongo.fullname" . }}
+  labels:
+    app: {{ template "apimongo.name" . }}
+    chart: {{ template "apimongo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "apimongo.name" . }}
+    release: {{ .Release.Name }}
