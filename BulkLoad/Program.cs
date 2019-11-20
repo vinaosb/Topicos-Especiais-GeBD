@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using API.SQL.Models;
 using SharedLibrary.Entities.Custom;
+using SharedLibrary;
 
 namespace BulkLoad
 {
@@ -373,6 +374,72 @@ namespace BulkLoad
                     mongo.Add(atual7);
                 }
             }
+
+            using(var sender = Sender<Regiao>("https://localhost:44390/api")){
+                foreach(Regiao atual in regioes){
+                    sender.Post(atual,"Regioes");
+                }
+            }
+
+            using(var sender = Sender<Estado>("https://localhost:44390/api")){
+                foreach(Estado atual in estados){
+                    sender.Post(atual,"Estados");
+                }
+            }
+
+            using(var sender = Sender<Municipio>("https://localhost:44390/api")){
+                foreach(Municipio atual in municipios){
+                    sender.Post(atual,"Municipios");
+                }
+            }
+
+            using(var sender = Sender<Endereco>("https://localhost:44390/api")){
+                foreach(Endereco atual in enderecos){
+                    sender.Post(atual,"Enderecos");
+                }
+            }
+
+            using(var sender = Sender<MantenedoraDaEscola>("https://localhost:44390/api")){
+                foreach(MantenedoraDaEscola atual in mantenedoras){
+                    sender.Post(atual,"MantenedorasDasEscolas");
+                }
+            }
+
+            using(var sender = Sender<Escola>("https://localhost:44390/api")){
+                foreach(Escola atual in escolas){
+                    sender.Post(atual,"Escolas");
+                }
+            }
+
+            using(var sender = Sender<Escola>("https://localhost:44390/api")){
+                foreach(Escola atual in escolas){
+                    sender.Post(atual,"Escolas");
+                }
+            }
+
+            using(var sender = Sender<CensoEscola>("https://localhost:44390/api")){
+                foreach(CensoEscola atual in censoEscolas){
+                    sender.Post(atual,"CensoEscolas");
+                }
+            }
+
+            using(var sender = Sender<CorreioEletronico>("https://localhost:44390/api")){
+                foreach(CorreioEletronico atual in emails){
+                    sender.Post(atual,"CorreioEletronico");
+                }
+            }
+
+            using(var sender = Sender<Telefone>("https://localhost:44390/api")){
+                foreach(Telefone atual in telefones){
+                    sender.Post(atual,"Telefones");
+                }
+            }
+            using(var sender = Sender<ExtrasDaEscola>("https://localhost:44390/api")){
+                foreach(ExtrasDaEscola atual in mongo){
+                    sender.Post(atual,"Mongo");
+                }
+            }
+            
 
             path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\escolas_media_alunos_turma_2010.xls";
             //Application excel = new Application();
