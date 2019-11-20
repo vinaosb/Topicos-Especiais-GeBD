@@ -33,6 +33,20 @@ namespace SharedLibrary
 			return escolas;
 		}
 
+		public async Task<T> Get(string path, string Id)
+		{
+			var response = await client.GetAsync("/" + path + "/" + Id);
+			T escolas = default;
+
+			if (response.IsSuccessStatusCode)
+			{
+				var result = await response.Content.ReadAsStringAsync();
+				escolas = JsonConvert.DeserializeObject<T>(result);
+
+			}
+			return escolas;
+		}
+
 		public async Task<T> Post(T obj,string path)
 		{
 			var cont = JsonConvert.SerializeObject(obj);
