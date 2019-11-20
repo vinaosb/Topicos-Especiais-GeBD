@@ -1,0 +1,48 @@
+﻿@page "/escola"
+
+@using API.SQL.Models
+@inject Data.EscolasService EService
+@inject NavigationManager nm
+
+<h1>CensoEscola</h1>
+
+@if (censosEscolas == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Codigo da Entidade</th>
+				<th>Nome da Entidade</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var modelItem in censosEscolas)
+			{
+				<tr>
+					<td>@modelItem.CodEntidade</td>
+					<td>@modelItem.Nome</td>
+					<td><button class="btn btn-primary" @onclick="@(e => NavigateToCensoEscola(modelItem.CodEntidade.ToString()))">Details</button></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	API.SQL.Models.Escola[] censosEscolas;
+
+	protected override async Task OnInitializedAsync()
+	{
+		censosEscolas = await EService.GetAsync();
+	}
+
+	private void NavigateToCensoEscola(string text)
+	{
+		nm.NavigateTo("CensoEscola/{text}");
+	}
+}

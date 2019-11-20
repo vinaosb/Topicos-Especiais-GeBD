@@ -39,6 +39,20 @@ namespace API.SQL.Controllers
 			return censoEscola;
 		}
 
+		// GET: api/CensoEscolas/101010
+		[HttpGet("{id}")]
+		public async Task<ActionResult<IEnumerable<CensoEscola>>> GetCensoEscola(long id)
+		{
+			var censoEscola = await _context.CensoEscola.Where(ce => ce.CodEntidade == id).ToListAsync();
+
+			if (censoEscola == null)
+			{
+				return NotFound();
+			}
+
+			return censoEscola;
+		}
+
 		// PUT: api/CensoEscolas/2018/101010
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
 		// more details see https://aka.ms/RazorPagesCRUD.
