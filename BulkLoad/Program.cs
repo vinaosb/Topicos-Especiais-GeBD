@@ -213,7 +213,7 @@ namespace BulkLoad
                     {
                         if (values[i].ToLower().Equals("sim"))
                         {
-                            //atual7.ServicosDaEscola.Add(headers[i]);
+                            atual7.ServicosDaEscola.Add(headers[i]);
                         }
                     }
 
