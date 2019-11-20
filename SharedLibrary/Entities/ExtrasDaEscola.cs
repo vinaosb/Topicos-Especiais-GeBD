@@ -55,6 +55,5 @@ namespace SharedLibrary.Entities.Custom
 		public int NumCNPJUnidadeExecutora { get; set; }
 		public string ServicosDaEscola { get; set; }
 		public EspecificacaoEscolaPrivada EscolaPrivada { get; set; }
-		public BigInteger Id { get; set; }
 	}
 }
