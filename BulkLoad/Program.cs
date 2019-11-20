@@ -23,7 +23,7 @@ namespace BulkLoad
             List<CorreioEletronico> emails = new List<CorreioEletronico>();
             List<Telefone> telefones = new List<Telefone>();
             //mongo
-            List<MongoData> mongo = new List<MongoData>();
+            List<ExtrasDaEscola> mongo = new List<ExtrasDaEscola>();
             String[] headers;
 
             var count_endereço = 0;
@@ -37,8 +37,7 @@ namespace BulkLoad
                 }
                 var lin = reader.ReadLine();
                 headers = lin.Split(';');
-                foreach(string head in headers)
-                    Console.WriteLine(head);
+                
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -176,31 +175,36 @@ namespace BulkLoad
 
                     //MONGO
 
-                    var atual7 = new MongoData(Cod_Entidade, ano);
-                    atual7.MATERIAL_ESP_NAO_UTILIZA = values[124];
-                    atual7.MATERIAL_ESP_QUILOMBOLA = values[125];
-                    atual7.MATERIAL_ESP_INDIGENA = values[126];
-                    atual7.NUM_CNPJ_UNIDADE_EXECUTORA = values[47];
-                    atual7.NUM_CNPJ_ESCOLA_PRIVADA = values[46];
-                    atual7.CATESCPRIVADA = values[6];
+                    //var atual7 = new MongoData(Cod_Entidade, ano);
+                    var atual7 = new ExtrasDaEscola();
+                    atual7.ID.Ano = System.Convert.ToInt16(ano);
+                    atual7.ID.Cod_Entidade = System.Convert.ToInt64(Cod_Entidade);
+
+                    atual7.MateriaisEspecificos.MaterialEspecificoNaoUtiliza = values[124].ToLower().Equals("sim") ? true : false; 
+                    atual7.MateriaisEspecificos.MaterialEspecificoQuilombola = values[125].ToLower().Equals("sim") ? true : false; 
+                    atual7.MateriaisEspecificos.MaterialEspecificoIndigena = values[126].ToLower().Equals("sim") ? true : false; 
+
+                    atual7.NumCNPJUnidadeExecutora = System.Convert.ToInt32(values[47]);
+                    atual7.EscolaPrivada.NumCNPJEscolaPrivada = System.Convert.ToInt32(values[46]);
+                    atual7.EscolaPrivada.EscolaEFilantropica = values[6].ToLower().Equals("particular") ? true: false;
 
                     for (var i=38;i<46;i++) {
                         if (values[i].ToLower().Equals("sim")) {
-                            atual7.Dependencias.Add(headers[i]);
+                            atual7.DependenciasDaEscola.Add(headers[i]);
                         }
                     }
                     for (var i = 56; i < 80; i++)
                     {
                         if (values[i].ToLower().Equals("sim"))
                         {
-                            atual7.Dependencias.Add(headers[i]);
+                            atual7.DependenciasDaEscola.Add(headers[i]);
                         }
                     }
                     for (var i = 82; i <= 86; i++)
                     {
                         if (values[i].ToLower().Equals("sim"))
                         {
-                            atual7.Dependencias.Add(headers[i]);
+                            atual7.DependenciasDaEscola.Add(headers[i]);
                         }
                     }
 
@@ -209,161 +213,161 @@ namespace BulkLoad
                     {
                         if (values[i].ToLower().Equals("sim"))
                         {
-                            atual7.Servicos.Add(headers[i]);
+                            //atual7.ServicosDaEscola.Add(headers[i]);
                         }
                     }
 
                     //equips
-                    atual7.Equipamentos.Add(new Equipamento("Computadores",values[110]));
+                    atual7.Equipamentos.Add(new ExtrasDaEscola.EquipamentosDaEscola("Computadores",values[110]));
                     for (var i = 113; i < 124; i++)
                     {
                         if (values[i].ToLower().Equals("sim"))
                         {
-                            atual7.Equipamentos.Add(new Equipamento(headers[i],"1"));
+                            atual7.Equipamentos.Add(new ExtrasDaEscola.EquipamentosDaEscola(headers[i],"1"));
                         }
                     }
 
                     if (values[135].Equals("1")) {
                         var tipo = "Educação Básica";
-                        atual7.Matriculas.Add(new Matricula(tipo,"total",values[136]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo,"total",values[136]));
                     }
                     if (values[137].Equals("1"))
                     {
                         var tipo = "Educação Infantil";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[138]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[138]));
                     }
                     if (values[139].Equals("1"))
                     {
                         var tipo = "CRECHE";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[140]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[140]));
                     }
                     if (values[141].Equals("1"))
                     {
                         var tipo = "PRÉ-ESCOLA";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[142]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[142]));
                     }
                     if (values[143].Equals("1"))
                     {
                         var tipo = "Ensino Fundamental - Total";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[144]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "Series Iniciais", values[145]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[146]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[147]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[148]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[149]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "5ª Série", values[150]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "6ª Série", values[151]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "7ª Série", values[152]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "8ª Série", values[153]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[144]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Series Iniciais", values[145]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[146]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[147]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[148]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[149]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "5ª Série", values[150]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "6ª Série", values[151]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "7ª Série", values[152]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "8ª Série", values[153]));
                     }
                     if (values[154].Equals("1"))
                     {
                         var tipo = "Ensino Fundamental";
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª a 4ª Série e Anos Iniciais", values[155]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª a 4ª Série e Anos Iniciais", values[155]));
                     }
                     if (values[156].Equals("1"))
                     {
                         var tipo = "Ensino Fundamental";
-                        atual7.Matriculas.Add(new Matricula(tipo, "5ª a 8ª Série e Anos Finais", values[157]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "5ª a 8ª Série e Anos Finais", values[157]));
                     }
                     if (values[158].Equals("1"))
                     {
                         var tipo = "Ensino Fundamental - com 8 anos";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[159]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[160]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[161]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[162]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[163]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "5ª Série", values[164]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "6ª Série", values[165]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "7ª Série", values[166]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "8ª Série", values[167]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[159]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[160]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[161]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[162]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[163]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "5ª Série", values[164]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "6ª Série", values[165]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "7ª Série", values[166]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "8ª Série", values[167]));
                     }
                     if (values[168].Equals("1"))
                     {
                         var tipo = "Ensino Fundamental - com 9 anos";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[169]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Ano", values[170]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Ano", values[171]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Ano", values[172]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Ano", values[173]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "5ª Ano", values[174]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "6ª Ano", values[175]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "7ª Ano", values[176]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "8ª Ano", values[177]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "9ª Ano", values[178]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[169]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Ano", values[170]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Ano", values[171]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Ano", values[172]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Ano", values[173]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "5ª Ano", values[174]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "6ª Ano", values[175]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "7ª Ano", values[176]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "8ª Ano", values[177]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "9ª Ano", values[178]));
                     }
                     if (values[179].Equals("1"))
                     {
                         var tipo = "Ensino Médio - Total";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[180]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[181]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[182]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[183]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[184]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "Não Seriado", values[185]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[180]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[181]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[182]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[183]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[184]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Não Seriado", values[185]));
                     }
                     if (values[186].Equals("1"))
                     {
                         var tipo = "Ensino Médio - Regular";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[187]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[188]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[189]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[190]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[191]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "Não Seriado", values[192]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[187]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[188]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[189]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[190]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[191]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Não Seriado", values[192]));
                     }
                     if (values[193].Equals("1"))
                     {
                         var tipo = "Ensino Médio - Integrado";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[194]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[195]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[196]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[197]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[198]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "Não Seriado", values[199]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[194]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[195]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[196]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[197]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[198]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Não Seriado", values[199]));
                     }
                     if (values[200].Equals("1"))
                     {
                         var tipo = "Ensino Médio - Normal / Magistério";
-                        atual7.Matriculas.Add(new Matricula(tipo, "total", values[201]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "1ª Série", values[202]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "2ª Série", values[203]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "3ª Série", values[204]));
-                        atual7.Matriculas.Add(new Matricula(tipo, "4ª Série", values[205]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "total", values[201]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "1ª Série", values[202]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "2ª Série", values[203]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "3ª Série", values[204]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "4ª Série", values[205]));
                     }
                     var tipo1 = "Educação Profissional";
                     if (values[206].Equals("1"))
                     {
-                        atual7.Matriculas.Add(new Matricula(tipo1, "Total", values[207]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo1, "Total", values[207]));
                     }
                     if (values[208].Equals("1"))
                     {
-                        atual7.Matriculas.Add(new Matricula(tipo1, "Concomitante", values[209]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo1, "Concomitante", values[209]));
                     }
                     if (values[210].Equals("1"))
                     {
-                        atual7.Matriculas.Add(new Matricula(tipo1, "Concomitante", values[211]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo1, "Concomitante", values[211]));
                     }
                     if (values[212].Equals("1"))
                     {
                         var tipo = "EJA";
-                        atual7.Matriculas.Add(new Matricula(tipo, "Total", values[213]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Total", values[213]));
                     }
                     if (values[214].Equals("1"))
                     {
                         var tipo = "EJA";
-                        atual7.Matriculas.Add(new Matricula(tipo, "Total - Ensino Fundamental", values[215]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Total - Ensino Fundamental", values[215]));
                     }
                     if (values[216].Equals("1"))
                     {
                         var tipo = "EJA";
-                        atual7.Matriculas.Add(new Matricula(tipo, "Total - Ensino Médio", values[217]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Total - Ensino Médio", values[217]));
                     }
                     if (values[218].Equals("1"))
                     {
                         var tipo = "EJA";
-                        atual7.Matriculas.Add(new Matricula(tipo, "Presencial", values[219]));
+                        atual7.Matriculas.Add(new ExtrasDaEscola.Numero_Matriculas(tipo, "Presencial", values[219]));
                     }
 
                     mongo.Add(atual7);
@@ -401,54 +405,9 @@ namespace BulkLoad
     
     
 
-    class MongoData
-    {
-        public String Cod_Entidade { get; set; }
-        public String ano { get; set; }
-        public String MATERIAL_ESP_NAO_UTILIZA { get; set; }
-        public String MATERIAL_ESP_QUILOMBOLA { get; set; }
-        public String MATERIAL_ESP_INDIGENA { get; set; }
-        public String NUM_CNPJ_UNIDADE_EXECUTORA { get; set; }
-        public String CATESCPRIVADA { get; set; }
-        public String NUM_CNPJ_ESCOLA_PRIVADA { get; set; }
-        public List<String> Dependencias { get; set; }
-        public List<String> Servicos { get; set; }
-        public List<Equipamento> Equipamentos { get; set; }
-        public List<Matricula> Matriculas { get; set; }
+   
 
-        public MongoData(string cod_Entidade, string ano)
-        {
-            Cod_Entidade = cod_Entidade;
-            this.ano = ano;
-        }
-    }
-
-    class Equipamento
-    {
-        public String Nome_Equipamento { get; set; }
-        public String Numero_De_Equip { get; set; }
-
-        public Equipamento(string nome_Equipamento, string numero_De_Equip)
-        {
-            Nome_Equipamento = nome_Equipamento;
-            Numero_De_Equip = numero_De_Equip;
-        }
-    }
-
-    class Matricula
-    {
-        public String Tipo_Educacional { get; set; }
-        public String Especificacao { get; set; }
-        public String Numero_De_Matriculas { get; set; }
-
-        public Matricula(string tipo_Educacional, string especificacao, string numero_De_Matriculas)
-        {
-            Tipo_Educacional = tipo_Educacional;
-            Especificacao = especificacao;
-            Numero_De_Matriculas = numero_De_Matriculas;
-        }
-    }
-
+    
 
 
     }

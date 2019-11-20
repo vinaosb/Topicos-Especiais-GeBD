@@ -16,7 +16,14 @@ namespace SharedLibrary.Entities.Custom
 			public Tipo_Educacional TE { get; set; }
 			public string Especificacao { get; set; }
 			public int Numero_De_Matriculas { get; set; }
-		}
+
+            public Numero_Matriculas(string tipo_Educacional, string especificacao, string numero_De_Matriculas)
+            {
+                //Tipo_Educacional = tipo_Educacional;
+                Especificacao = especificacao;
+                Numero_De_Matriculas = System.Convert.ToInt32(numero_De_Matriculas);
+            }
+        }
 		public class MediaPorAlunoPorEscola
 		{
 			public Tipo_Educacional Cod_TE { get; set; }
@@ -27,7 +34,12 @@ namespace SharedLibrary.Entities.Custom
 		{
 			public string Nome_Equip { get; set; }
 			public short Numero_De_Equip { get; set; }
-		}
+            public EquipamentosDaEscola(string nome_Equipamento, string numero_De_Equip)
+            {
+                Nome_Equip = nome_Equipamento;
+                Numero_De_Equip = System.Convert.ToInt16(numero_De_Equip);
+            }
+        }
 		public class MateriaisDidaticosEspecificos
 		{
 			public bool MaterialEspecificoNaoUtiliza { get; set; }
@@ -55,5 +67,14 @@ namespace SharedLibrary.Entities.Custom
 		public int NumCNPJUnidadeExecutora { get; set; }
 		public string ServicosDaEscola { get; set; }
 		public EspecificacaoEscolaPrivada EscolaPrivada { get; set; }
-	}
+
+        public ExtrasDaEscola()
+        {
+            Matriculas = new List<Numero_Matriculas>();
+            Medias = new List<MediaPorAlunoPorEscola>();
+            Equipamentos = new List<EquipamentosDaEscola>();
+            DependenciasDaEscola = new List<string>();
+            //ServicosDaEscola = List<string>();
+        }
+    }
 }
