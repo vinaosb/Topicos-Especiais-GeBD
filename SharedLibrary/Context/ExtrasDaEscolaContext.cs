@@ -1,7 +1,6 @@
 ﻿using MongoDB.Driver;
 using SharedLibrary.Entities.Custom;
 using System.Collections.Generic;
-using System.Security.Authentication;
 using static SharedLibrary.Entities.Custom.ExtrasDaEscola;
 
 namespace SharedLibrary.Context.Custom
@@ -12,12 +11,7 @@ namespace SharedLibrary.Context.Custom
 
 		public ExtrasDaEscolaContext(IMongoDBSettings settings)
 		{
-			MongoClientSettings settings2 = MongoClientSettings.FromUrl(
-			  new MongoUrl(settings.ConnectionString)
-			);
-			settings2.SslSettings =
-			  new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
-			var client = new MongoClient(settings2);
+			var client = new MongoClient(settings.CollectionString);
 			var database = client.GetDatabase(settings.DatabaseName);
 
 			_extras = database.GetCollection<ExtrasDaEscola>(settings.ExtrasCollectionName);
