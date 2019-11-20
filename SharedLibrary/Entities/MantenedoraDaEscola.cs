@@ -10,7 +10,7 @@ namespace API.SQL.Models
 		public bool SistemsSSesi { get; set; }
 		public bool Senai { get; set; }
 		public bool Sesc { get; set; }
-		public BigInteger? Id { get; set; }
+		
 
 		public virtual Escola CodEntidadeNavigation { get; set; }
 	}

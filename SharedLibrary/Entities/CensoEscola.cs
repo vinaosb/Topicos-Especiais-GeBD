@@ -32,7 +32,7 @@ namespace API.SQL.Models
 		public bool? ModEja { get; set; }
 		public short Ano { get; set; }
 		public long CodEntidade { get; set; }
-		public BigInteger? Id { get; set; }
+		
 
 		public virtual Escola CodEntidadeNavigation { get; set; }
 	}

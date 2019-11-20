@@ -12,7 +12,7 @@ namespace API.SQL.Models
 
 		public long CodRegiao { get; set; }
 		public string NomeRegiao { get; set; }
-		public BigInteger? Id { get; set; }
+		
 
 		public virtual ICollection<Estado> Estado { get; set; }
 	}
