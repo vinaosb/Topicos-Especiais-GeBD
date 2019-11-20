@@ -34,9 +34,11 @@ else
 
 @code {
 	API.SQL.Models.CensoEscola[] censosEscolas;
+	[Parameter]
+	public string Text;
 
 	protected override async Task OnInitializedAsync()
 	{
-		censosEscolas = await CEService.GetAsync();
+		censosEscolas = await CEService.GetAsync(Text);
 	}
 }
