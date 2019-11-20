@@ -74,7 +74,7 @@ namespace SharedLibrary.Entities.Custom
             Medias = new List<MediaPorAlunoPorEscola>();
             Equipamentos = new List<EquipamentosDaEscola>();
             DependenciasDaEscola = new List<string>();
-            //ServicosDaEscola = List<string>();
+            //ServicosDaEscola = new List<string>();
         }
     }
 }
