@@ -11,7 +11,7 @@ namespace SharedLibrary.Context.Custom
 
 		public ExtrasDaEscolaContext(IMongoDBSettings settings)
 		{
-			var client = new MongoClient(settings.CollectionString);
+			var client = new MongoClient(settings.ConnectionString);
 			var database = client.GetDatabase(settings.DatabaseName);
 
 			_extras = database.GetCollection<ExtrasDaEscola>(settings.ExtrasCollectionName);
