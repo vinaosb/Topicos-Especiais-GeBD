@@ -7,8 +7,14 @@ namespace API.SQL.Models
 		public long CodEntidade { get; set; }
 		public short Ano { get; set; }
 		public string Email { get; set; }
-		
 
-		public virtual Escola CodEntidadeNavigation { get; set; }
+        public CorreioEletronico(string cod_Entidade, string ano, string email)
+        {
+            CodEntidade = System.Convert.ToInt64(cod_Entidade);
+            Ano = System.Convert.ToInt16(ano);
+            Email = email;
+        }
+
+        public virtual Escola CodEntidadeNavigation { get; set; }
 	}
 }

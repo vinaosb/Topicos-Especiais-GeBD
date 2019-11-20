@@ -12,7 +12,19 @@ namespace API.SQL.Models
 			Telefone = new HashSet<Telefone>();
 		}
 
-		public long CodEntidade { get; set; }
+        public Escola(string cod_Entidade, string cod_Endereco, string localizacao, string nome, string categoria, string iD_LATITUDE, string iD_LONGITUDE, string instituicao_Sem_Fim_Lucrativo)
+        {
+            CodEntidade = System.Convert.ToInt64(cod_Entidade);
+            CodEndereco = System.Convert.ToInt64(cod_Endereco);
+            Localizacao = localizacao.ToLower().Equals("urbana") ? true : false; 
+            Nome = nome;
+            Categoria = categoria;
+            IdLatitude = iD_LATITUDE;
+            IdLongitude = iD_LONGITUDE;
+            InstituicaoSemFimLucrativo = instituicao_Sem_Fim_Lucrativo;
+        }
+
+        public long CodEntidade { get; set; }
 		public long CodEndereco { get; set; }
 		public bool? Localizacao { get; set; }
 		public string Nome { get; set; }

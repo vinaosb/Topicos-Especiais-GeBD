@@ -10,7 +10,13 @@ namespace API.SQL.Models
 			Estado = new HashSet<Estado>();
 		}
 
-		public long CodRegiao { get; set; }
+        public Regiao(string cod_Regiao, string nome_Regiao)
+        {
+            CodRegiao = System.Convert.ToInt64(cod_Regiao);
+            NomeRegiao = nome_Regiao;
+        }
+
+        public long CodRegiao { get; set; }
 		public string NomeRegiao { get; set; }
 		
 

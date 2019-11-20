@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using API.SQL.Models;
+using SharedLibrary.Entities.Custom;
 
 namespace BulkLoad
 {
@@ -17,7 +19,7 @@ namespace BulkLoad
             List<Endereco> enderecos = new List<Endereco>();
             List<MantenedoraDaEscola> mantenedoras = new List<MantenedoraDaEscola>();
             List<Escola> escolas = new List<Escola>();
-            List<Censo_Escola> censoEscolas = new List<Censo_Escola>();
+            List<CensoEscola> censoEscolas = new List<CensoEscola>();
             List<CorreioEletronico> emails = new List<CorreioEletronico>();
             List<Telefone> telefones = new List<Telefone>();
             //mongo
@@ -35,6 +37,8 @@ namespace BulkLoad
                 }
                 var lin = reader.ReadLine();
                 headers = lin.Split(';');
+                foreach(string head in headers)
+                    Console.WriteLine(head);
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
@@ -51,7 +55,7 @@ namespace BulkLoad
                     {
                         estados_cod.Add(Cod_Estado);
                         //recomendo fazer consulta
-                        var Cod_Regiao = regioes.Find(c => (c.Nome_Regiao == values[8].ToLower())).Cod_Regiao;
+                        var Cod_Regiao = regioes.Find(c => (c.NomeRegiao == values[8].ToLower())).CodRegiao;
                         var Nome_Estado = values[10];
                         //var UF = vem do outro csv
                         //Console.WriteLine(Nome_Estado);
@@ -89,6 +93,7 @@ namespace BulkLoad
                     var sistema_S = values[33];
                     var senai = values[34];
                     var sesc = values[35];
+                    System.Console.WriteLine(sindicato);
 
                     var atual2 = new MantenedoraDaEscola(Cod_Entidade, empresa, sindicato, sistema_S, senai, sesc);
                     mantenedoras.Add(atual2);
@@ -131,7 +136,7 @@ namespace BulkLoad
                     var mOD_EJA = values[134];
 
 
-                    var atual4 = new Censo_Escola(ano, Cod_Entidade, iD_DEPENDENCIA_ADM,
+                    var atual4 = new CensoEscola(ano, Cod_Entidade, iD_DEPENDENCIA_ADM,
                         dependencia_Administrativa, rede, dataInicioAnoLetivo, dataFimAnoLetivo,
                         situacao_Funcionamento, eF_Organizado_Em_Ciclos, atividade_Complementar,
                         dOCUMENTO_REGULAMENTACAO, aCESSIBILIDADE, dEPENDENCIAS_PNE, sANITARIO_PNE,
@@ -155,17 +160,17 @@ namespace BulkLoad
 
                     if (numero1.Length > 1)
                     {
-                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, "n");
+                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, false);
                         telefones.Add(atual6);
                     }
                     if (numero2.Length > 1)
                     {
-                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, "n");
+                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, false);
                         telefones.Add(atual6);
                     }
                     if (numeroFax.Length > 1)
                     {
-                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, "s");
+                        var atual6 = new Telefone(Cod_Entidade, ano, numero1, dDD, true);
                         telefones.Add(atual6);
                     }
 
@@ -381,231 +386,20 @@ namespace BulkLoad
             return regioes;
         }
 
-        static List<Regiao> dependencias()
-        {
-            
-            List<Regiao> regioes = new List<Regiao>();
-            regioes.Add(new Regiao("1", "norte"));
-            regioes.Add(new Regiao("2", "nordeste"));
-            regioes.Add(new Regiao("3", "sudeste"));
-            regioes.Add(new Regiao("4", "sul"));
-            regioes.Add(new Regiao("5", "centro-oeste"));
-            return regioes;
-        }
+        
 
 
 
     }
 
     //SQL
-    class Regiao
-    {
-        public String Cod_Regiao { get; set; }
-        public String Nome_Regiao { get; set; }
 
-        public Regiao(string cod_Regiao, string nome_Regiao)
-        {
-            Cod_Regiao = cod_Regiao;
-            Nome_Regiao = nome_Regiao;
-        }
-    }
+    
+    
 
-    class Estado
-    {
-        public String Cod_Estado { get; set; }
-        public String Cod_Regiao { get; set; }
-        public String Nome_Estado { get; set; }
-        public String UF { get; set; }
-
-        public Estado(string cod_Estado, string cod_Regiao, string nome_Estado, string uF)
-        {
-            Cod_Estado = cod_Estado;
-            Cod_Regiao = cod_Regiao;
-            Nome_Estado = nome_Estado;
-            UF = uF;
-        }
-
-        public Estado(string cod_Estado, string cod_Regiao, string nome_Estado)
-        {
-            Cod_Estado = cod_Estado;
-            Cod_Regiao = cod_Regiao;
-            Nome_Estado = nome_Estado;
-        }
-    }
-    class Municipio
-    {
-        public String Cod_Municipio { get; set; }
-        public String Cod_Estado { get; set; }
-        public String PK_COD_MUNICIPIO_OLD { get; set; }
-        public String Nome_Municipio { get; set; }
-
-        public Municipio(string cod_Municipio, string cod_Estado, string pK_COD_MUNICIPIO_OLD, string nome_Municipio)
-        {
-            Cod_Municipio = cod_Municipio;
-            Cod_Estado = cod_Estado;
-            PK_COD_MUNICIPIO_OLD = pK_COD_MUNICIPIO_OLD;
-            Nome_Municipio = nome_Municipio;
-        }
-    }
-    class Endereco
-    {
-        public String Cod_Endereco { get; set; }
-        public String Cod_Municipio { get; set; }
-        public String CEP { get; set; }
-        public String Nome_Distrito { get; set; }
-        public String Endereco1 { get; set; }
-        public String Numero { get; set; }
-        public String Complemento { get; set; }
-        public String Bairro { get; set; }
-
-        public Endereco(string cod_Endereco, string cod_Municipio, string cEP, string nome_Distrito, string endereco1, string numero, string complemento, string bairro)
-        {
-            Cod_Endereco = cod_Endereco;
-            Cod_Municipio = cod_Municipio;
-            CEP = cEP;
-            Nome_Distrito = nome_Distrito;
-            Endereco1 = endereco1;
-            Numero = numero;
-            Complemento = complemento;
-            Bairro = bairro;
-        }
-    }
-
-    class MantenedoraDaEscola
-    {
-        public String Cod_Entidade { get; set; }
-        public String Empresa { get; set; }
-        public String Sindicato { get; set; }
-        public String Sistema_S { get; set; }
-        public String Senai { get; set; }
-        public String Sesc { get; set; }
-
-        public MantenedoraDaEscola(String cod_Entidade, String empresa, String sindicato, String sistema_S, String senai, String sesc)
-        {
-            this.Cod_Entidade = cod_Entidade;
-            Empresa = empresa;
-            Sindicato = sindicato;
-            Sistema_S = sistema_S;
-            Senai = senai;
-            Sesc = sesc;
-        }
-    }
-
-    class Escola
-    {
-        public String Cod_Entidade { get; set; }
-        public String Cod_Endereco { get; set; }
-        public String Localizacao { get; set; }
-        public String Nome { get; set; }
-        public String Categoria { get; set; }
-        public String ID_LATITUDE { get; set; }
-        public String ID_LONGITUDE { get; set; }
-        public String Instituicao_Sem_Fim_Lucrativo { get; set; }
-
-        public Escola(string cod_Entidade, string cod_Endereco, string localizacao, string nome, string categoria, string iD_LATITUDE, string iD_LONGITUDE, string instituicao_Sem_Fim_Lucrativo)
-        {
-            Cod_Entidade = cod_Entidade;
-            Cod_Endereco = cod_Endereco;
-            Localizacao = localizacao;
-            Nome = nome;
-            Categoria = categoria;
-            ID_LATITUDE = iD_LATITUDE;
-            ID_LONGITUDE = iD_LONGITUDE;
-            Instituicao_Sem_Fim_Lucrativo = instituicao_Sem_Fim_Lucrativo;
-        }
-    }
-
-    class Censo_Escola
-    {
-        public String Ano { get; set; }
-        public String Cod_Entidade { get; set; }
-        public String ID_DEPENDENCIA_ADM { get; set; }
-        public String Dependencia_Administrativa { get; set; }
-        public String Rede { get; set; }
-        public String DataInicioAnoLetivo { get; set; }
-        public String DataFimAnoLetivo { get; set; }
-        public String Situacao_Funcionamento { get; set; }
-        public String EF_Organizado_Em_Ciclos { get; set; }
-        public String Atividade_Complementar { get; set; }
-        public String DOCUMENTO_REGULAMENTACAO { get; set; }
-        public String ACESSIBILIDADE { get; set; }
-        public String DEPENDENCIAS_PNE { get; set; }
-        public String SANITARIO_PNE { get; set; }
-        public String AEE { get; set; }
-        public String NUM_SALAS_EXISTENTES { get; set; }
-        public String NUM_SALAS_UTILIZADAS { get; set; }
-        public String NUM_SALA_LEITURA { get; set; }
-        public String NUM_FUNCIONARIOS { get; set; }
-        public String EDUCACAO_INDIGENA { get; set; }
-        public String LINGUA_INDIGENA { get; set; }
-        public String LINGUA_PORTUGUESA { get; set; }
-        public String ESPACO_TURMA_PBA { get; set; }
-        public String ABRE_FINAL_SEMANA { get; set; }
-        public String MOD_ENS_REGULAR { get; set; }
-        public String MOD_EDUC_ESPECIAL { get; set; }
-        public String MOD_EJA { get; set; }
-
-        public Censo_Escola(string ano, string cod_Entidade, string iD_DEPENDENCIA_ADM, string dependencia_Administrativa, string rede, string dataInicioAnoLetivo, string dataFimAnoLetivo, string situacao_Funcionamento, string eF_Organizado_Em_Ciclos, string atividade_Complementar, string dOCUMENTO_REGULAMENTACAO, string aCESSIBILIDADE, string dEPENDENCIAS_PNE, string sANITARIO_PNE, string aEE, string nUM_SALAS_EXISTENTES, string nUM_SALAS_UTILIZADAS, string nUM_SALA_LEITURA, string nUM_FUNCIONARIOS, string eDUCACAO_INDIGENA, string lINGUA_INDIGENA, string lINGUA_PORTUGUESA, string eSPACO_TURMA_PBA, string aBRE_FINAL_SEMANA, string mOD_ENS_REGULAR, string mOD_EDUC_ESPECIAL, string mOD_EJA)
-        {
-            Ano = ano;
-            Cod_Entidade = cod_Entidade;
-            ID_DEPENDENCIA_ADM = iD_DEPENDENCIA_ADM;
-            Dependencia_Administrativa = dependencia_Administrativa;
-            Rede = rede;
-            DataInicioAnoLetivo = dataInicioAnoLetivo;
-            DataFimAnoLetivo = dataFimAnoLetivo;
-            Situacao_Funcionamento = situacao_Funcionamento;
-            EF_Organizado_Em_Ciclos = eF_Organizado_Em_Ciclos;
-            Atividade_Complementar = atividade_Complementar;
-            DOCUMENTO_REGULAMENTACAO = dOCUMENTO_REGULAMENTACAO;
-            ACESSIBILIDADE = aCESSIBILIDADE;
-            DEPENDENCIAS_PNE = dEPENDENCIAS_PNE;
-            SANITARIO_PNE = sANITARIO_PNE;
-            AEE = aEE;
-            NUM_SALAS_EXISTENTES = nUM_SALAS_EXISTENTES;
-            NUM_SALAS_UTILIZADAS = nUM_SALAS_UTILIZADAS;
-            NUM_SALA_LEITURA = nUM_SALA_LEITURA;
-            NUM_FUNCIONARIOS = nUM_FUNCIONARIOS;
-            EDUCACAO_INDIGENA = eDUCACAO_INDIGENA;
-            LINGUA_INDIGENA = lINGUA_INDIGENA;
-            LINGUA_PORTUGUESA = lINGUA_PORTUGUESA;
-            ESPACO_TURMA_PBA = eSPACO_TURMA_PBA;
-            ABRE_FINAL_SEMANA = aBRE_FINAL_SEMANA;
-            MOD_ENS_REGULAR = mOD_ENS_REGULAR;
-            MOD_EDUC_ESPECIAL = mOD_EDUC_ESPECIAL;
-            MOD_EJA = mOD_EJA;
-        }
-    }
-    class CorreioEletronico
-    {
-        public String Cod_Entidade { get; set; }
-        public String Ano { get; set; }
-        public String Email { get; set; }
-
-        public CorreioEletronico(string cod_Entidade, string ano, string email)
-        {
-            Cod_Entidade = cod_Entidade;
-            Ano = ano;
-            Email = email;
-        }
-    }
-    class Telefone
-    {
-        public String Cod_Entidade { get; set; }
-        public String Ano { get; set; }
-        public String Numero { get; set; }
-        public String DDD { get; set; }
-        public String FAX { get; set; }
-
-        public Telefone(string cod_Entidade, string ano, string numero, string dDD, string fAX)
-        {
-            Cod_Entidade = cod_Entidade;
-            Ano = ano;
-            Numero = numero;
-            DDD = dDD;
-            FAX = fAX;
-        }
-    }
+    
+    
+    
 
     class MongoData
     {

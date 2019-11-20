@@ -10,7 +10,19 @@ namespace API.SQL.Models
 			Escola = new HashSet<Escola>();
 		}
 
-		public long CodEndereco { get; set; }
+        public Endereco(string cod_Endereco, string cod_Municipio, string cEP, string nome_Distrito, string endereco1, string numero, string complemento, string bairro)
+        {
+            CodEndereco = System.Convert.ToInt64(cod_Endereco);
+            CodMunicipio = System.Convert.ToInt64(cod_Municipio);
+            Cep = cEP;
+            NomeDestrito = nome_Distrito;
+            Endereco1 = endereco1;
+            Numero = numero;
+            Complemento = complemento;
+            Bairro = bairro;
+        }
+
+        public long CodEndereco { get; set; }
 		public long CodMunicipio { get; set; }
 		public string Cep { get; set; }
 		public string NomeDestrito { get; set; }
