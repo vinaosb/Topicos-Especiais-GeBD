@@ -14,7 +14,7 @@ namespace Gerencia_de_Escolas_Website.Data
 	{
 		public List<CensoEscola> censosEscolas { get; set; }
 		public HttpClient client = new HttpClient();
-		public string path = "";
+		public string path = "https://localhost:44309/api/";
 
 		public CensoEscolasService()
 		{
@@ -26,7 +26,7 @@ namespace Gerencia_de_Escolas_Website.Data
 
 		public async Task<CensoEscola[]> GetAsync()
 		{
-			var response = await client.GetAsync(path);
+			var response = await client.GetAsync("CensoEscolas");
 
 			if (response.IsSuccessStatusCode)
 			{
