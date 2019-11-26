@@ -26,10 +26,10 @@ else
 			@foreach (var modelItem in censosEscolas)
 			{
 				<tr>
-					<td>escola.nome</td>
+					<td>@modelItem.CodEntidadeNavigation.Nome</td>
 					<td>@modelItem.Ano</td>
-					<td>telefone</td>
-					<td>email</td>
+					<td>@getTel(modelItem)</td>
+					<td>@modelItem.CodEntidadeNavigation.CorreioEletronico.FirstOrDefault()</td>
 					<td>@modelItem.Rede</td>
 				</tr>
 			}
@@ -49,7 +49,12 @@ else
 	}
 
 	private void getEscolaName(string codEscola,string ano)
-	{	
+	{
 
+	}
+
+	private string getTel(API.SQL.Models.CensoEscola ce)
+	{
+		return ce.CodEntidadeNavigation.Telefone.FirstOrDefault().Ddd.ToString() + ce.CodEntidadeNavigation.Telefone.FirstOrDefault().Numero.ToString();
 	}
 }
