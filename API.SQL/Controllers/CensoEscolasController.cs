@@ -111,6 +111,32 @@ namespace API.SQL.Controllers
 			return CreatedAtAction("GetCensoEscola", new { ano = censoEscola.Ano, id = censoEscola.Ano }, censoEscola);
 		}
 
+		// POST: api/CensoEscolas
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		[HttpPost("bulk")]
+		public async Task<ActionResult> PostCensoEscola(List<CensoEscola> censoEscola)
+		{
+			_context.CensoEscola.AddRange(censoEscola);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException)
+			{
+				if (CensoEscolaExists(censoEscola.FirstOrDefault().Ano, censoEscola.FirstOrDefault().CodEntidade))
+				{
+					return Conflict();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return Accepted();
+		}
+
 		// DELETE: api/CensoEscolas/2019/101010
 		[HttpDelete("{ano}/{id}")]
 		public async Task<ActionResult<CensoEscola>> DeleteCensoEscola(short ano, long id)

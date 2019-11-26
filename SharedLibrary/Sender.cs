@@ -68,7 +68,6 @@ namespace SharedLibrary
 				ret = JsonConvert.DeserializeObject<T>(result);
 			}
 
-			Console.WriteLine(ret.ToString());
 			return ret;
 		}
 	}

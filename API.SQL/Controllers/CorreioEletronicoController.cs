@@ -97,6 +97,32 @@ namespace API.SQL.Controllers
 			return CreatedAtAction("GetCorreioEletronico", new { ano = correioEletronico.Ano, id = correioEletronico.CodEntidade }, correioEletronico);
 		}
 
+		// POST: api/CorreioEletronicoes
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		[HttpPost("bulk")]
+		public async Task<ActionResult> PostCorreioEletronico(List<CorreioEletronico> correioEletronico)
+		{
+			_context.CorreioEletronico.AddRange(correioEletronico);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException)
+			{
+				if (CorreioEletronicoExists(correioEletronico.FirstOrDefault().Ano, correioEletronico.FirstOrDefault().CodEntidade))
+				{
+					return Conflict();
+				}
+				else
+				{
+					throw;
+				}
+			}
+			return Accepted();
+
+		}
+
 		// DELETE: api/CorreioEletronicoes/5
 		[HttpDelete("{ano}/{id}")]
 		public async Task<ActionResult<CorreioEletronico>> DeleteCorreioEletronico(short ano, long id)

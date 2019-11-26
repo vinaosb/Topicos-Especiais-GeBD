@@ -104,6 +104,33 @@ namespace API.SQL.Controllers
 			return CreatedAtAction("GetTelefone", new { num = telefone.Numero, ano = telefone.Ano, id = telefone.CodEntidade }, telefone);
 		}
 
+		// POST: api/Telefones
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		[HttpPost("bulk")]
+		public async Task<ActionResult> PostTelefone(List<Telefone> telefone)
+		{
+			_context.Telefone.AddRange(telefone);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException)
+			{
+				if (TelefoneExists(telefone.FirstOrDefault().Numero, telefone.FirstOrDefault().Ano, telefone.FirstOrDefault().CodEntidade))
+				{
+					return Conflict();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return Accepted();
+
+		}
+
 		// DELETE: api/Telefones/33333333/2018/101010
 		[HttpDelete("{num}/{ano}/{id}")]
 		public async Task<ActionResult<Telefone>> DeleteTelefone(long num, short ano, long id)

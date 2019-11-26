@@ -21,7 +21,7 @@ namespace API.Mongo.Controllers
 		public ActionResult<List<ExtrasDaEscola>> Get() =>
 			_extrasContext.Get();
 
-		[HttpGet("{ano}/{cod}")]
+		[HttpGet("{ano}/{id}")]
 		public ActionResult<ExtrasDaEscola> GetExtra(short ano, long id)
 		{
 			Indexer ind = new Indexer { Ano = ano, Cod_Entidade = id };
@@ -34,11 +34,19 @@ namespace API.Mongo.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<ExtrasDaEscola> PostExtra(ExtrasDaEscola extra)
+		public ActionResult PostExtra(ExtrasDaEscola extra)
 		{
 			_extrasContext.Upsert(extra.ID, extra);
 
-			return CreatedAtRoute("GetExtra", new { id = extra.ID, extra });
+			return Accepted();
+		}
+
+		[HttpPost("bulk")]
+		public ActionResult PostExtra(List<ExtrasDaEscola> extras)
+		{
+			_extrasContext.Bulk(extras);
+
+			return Accepted();
 		}
 
 		[HttpPut]

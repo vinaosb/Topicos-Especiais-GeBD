@@ -97,6 +97,32 @@ namespace API.SQL.Controllers
 			return CreatedAtAction("GetEndereco", new { id = endereco.CodEndereco }, endereco);
 		}
 
+		// POST: api/Enderecoes
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		[HttpPost("bulk")]
+		public async Task<ActionResult> PostEndereco(List<Endereco> endereco)
+		{
+			_context.Endereco.AddRange(endereco);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException)
+			{
+				if (EnderecoExists(endereco.FirstOrDefault().CodEndereco))
+				{
+					return Conflict();
+				}
+				else
+				{
+					throw;
+				}
+			}
+			return Accepted();
+
+		}
+
 		// DELETE: api/Enderecoes/5
 		[HttpDelete("{id}")]
 		public async Task<ActionResult<Endereco>> DeleteEndereco(long id)

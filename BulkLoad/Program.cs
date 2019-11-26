@@ -30,7 +30,7 @@ namespace BulkLoad
 
             var count_endereço = 0;
             //passar por cada csv
-            var path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
+            var path = @"C:\Users\Vinicius\Downloads\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
             using (var reader = new StreamReader(path))
             {
                 for (int o = 0; o < 11; o++)
@@ -85,9 +85,8 @@ namespace BulkLoad
 
                         }
 
-                                                                                                                                           Tocantins
-                        Console.WriteLine(Nome_Estado);
                         var atual = new Estado(Cod_Estado, Cod_Regiao, Nome_Estado);
+						atual.Uf = UF;
                         estados.Add(atual);
                     }
 
@@ -407,7 +406,7 @@ namespace BulkLoad
 
 			Console.WriteLine("Sender");
 
-			
+			/*
 			using (Sender<Regiao> sender = new Sender<Regiao>("https://localhost:44309/")){
                 foreach(Regiao atual in regioes){
 					_ = await sender.Post(atual,"api/Regioes");
@@ -429,59 +428,54 @@ namespace BulkLoad
 			}
 			Console.WriteLine("Muni");
 
-			using (var sender = new Sender<Endereco>("https://localhost:44309/")){
-                foreach(Endereco atual in enderecos){
-					_ = await sender.Post(atual, "api/Enderecos");
-                }
+			using (var sender = new Sender<List<Endereco>>("https://localhost:44309/")){
+
+				_ = await sender.Post(enderecos, "api/Enderecos/bulk");
 			}
 			Console.WriteLine("Ende");
 			
-			using (var sender = new Sender<Escola>("https://localhost:44309/"))
+			using (var sender = new Sender<List<Escola>>("https://localhost:44309/"))
 			{
-				foreach (Escola atual in escolas)
-				{
-					_ = await sender.Post(atual, "api/Escolas");
-				}
+				_ = await sender.Post(escolas, "api/Escolas/bulk");
 			}
 			Console.WriteLine("Escolas");
 
-			using (var sender = new Sender<MantenedoraDaEscola>("https://localhost:44309/")){
-                foreach(MantenedoraDaEscola atual in mantenedoras){
-					_ = await sender.Post(atual, "api/MantenedorasDasEscolas");
-                }
+			using (var sender = new Sender<List<MantenedoraDaEscola>>("https://localhost:44309/"))
+			{
+				_ = await sender.Post(mantenedoras, "api/MantenedorasDasEscolas/bulk");
 			}
 			Console.WriteLine("Mant");
 
-			using (var sender = new Sender<CorreioEletronico>("https://localhost:44309/")){
-                foreach(CorreioEletronico atual in emails){
-					_ = await sender.Post(atual, "api/CorreioEletronico");
-                }
+			using (var sender = new Sender<List<CorreioEletronico>>("https://localhost:44309/"))
+			{
+				_ = await sender.Post(emails, "api/CorreioEletronico/bulk");
 			}
 			Console.WriteLine("Email");
 
-			using (var sender = new Sender<Telefone>("https://localhost:44309/")){
-                foreach(Telefone atual in telefones){
-                    _ = await sender.Post(atual, "api/Telefones");
-                }
+			using (var sender = new Sender<List<Telefone>>("https://localhost:44309/"))
+			{
+				_ = await sender.Post(telefones, "api/Telefones/bulk");
 			}
 			Console.WriteLine("Tel");
 
-			using (var sender = new Sender<CensoEscola>("https://localhost:44309/"))
+			using (var sender = new Sender<List<CensoEscola>>("https://localhost:44309/"))
 			{
-				foreach (CensoEscola atual in censoEscolas)
-				{
-					_ = await sender.Post(atual, "api/CensoEscolas");
-				}
+				_ = await sender.Post(censoEscolas, "api/CensoEscolas/bulk");
 			}
 			Console.WriteLine("Censo");
-
-			using (var sender = new Sender<ExtrasDaEscola>("https://localhost:44390/")){
-                foreach(ExtrasDaEscola atual in mongo){
-					_ = await sender.Post(atual, "api/Mongo");
-                }
+			
+			using (var sender = new Sender<List<ExtrasDaEscola>>("https://localhost:44390/"))
+			{
+				int last = 0;
+				for (int i = 0; i < mongo.Count/1000; i++)
+				{
+					_ = await sender.Post(mongo.GetRange(1000*i,1000), "api/Mongo/bulk");
+					last = i*1000;
+				}
+				_ = await sender.Post(mongo.GetRange(last, mongo.Count-last), "api/Mongo/bulk");
 			}
 			Console.WriteLine("Mongo");
-			
+			*/
 
 			path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\escolas_media_alunos_turma_2010.xls";
             //Application excel = new Application();

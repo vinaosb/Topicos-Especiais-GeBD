@@ -97,6 +97,32 @@ namespace API.SQL.Controllers
 			return CreatedAtAction("GetEscola", new { id = escola.CodEntidade }, escola);
 		}
 
+		// POST: api/Escolas
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		[HttpPost("bulk")]
+		public async Task<ActionResult> PostEscola(List<Escola> escola)
+		{
+			_context.Escola.AddRange(escola);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException)
+			{
+				if (EscolaExists(escola.FirstOrDefault().CodEntidade))
+				{
+					return Conflict();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return Accepted();
+		}
+
 		// DELETE: api/Escolas/5
 		[HttpDelete("{id}")]
 		public async Task<ActionResult<Escola>> DeleteEscola(long id)

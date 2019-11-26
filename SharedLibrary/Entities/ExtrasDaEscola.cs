@@ -10,12 +10,22 @@ namespace SharedLibrary.Entities.Custom
 		{
 			public int Cod_TE { get; set; }
 			public string TipoEducacional { get; set; }
+
+			public Tipo_Educacional()
+			{
+
+			}
 		}
 		public class Numero_Matriculas
 		{
             public string TipoEducacional { get; set; }
             public string Especificacao { get; set; }
 			public int Numero_De_Matriculas { get; set; }
+
+			public Numero_Matriculas()
+			{
+
+			}
 
             public Numero_Matriculas(string tipo_Educacional, string especificacao, string numero_De_Matriculas)
             {
@@ -29,6 +39,11 @@ namespace SharedLibrary.Entities.Custom
 			public Tipo_Educacional Cod_TE { get; set; }
 			public int Serie { get; set; }
 			public double Media { get; set; }
+
+			public MediaPorAlunoPorEscola()
+			{
+
+			}
 		}
 		public class EquipamentosDaEscola
 		{
@@ -39,22 +54,38 @@ namespace SharedLibrary.Entities.Custom
                 Nome_Equip = nome_Equipamento;
                 Numero_De_Equip = System.Convert.ToInt16(numero_De_Equip);
             }
+			public EquipamentosDaEscola()
+			{
+
+			}
         }
 		public class MateriaisDidaticosEspecificos
 		{
 			public bool MaterialEspecificoNaoUtiliza { get; set; }
 			public bool MaterialEspecificoQuilombola { get; set; }
 			public bool MaterialEspecificoIndigena { get; set; }
+			public MateriaisDidaticosEspecificos()
+			{
+
+			}
 		}
 		public class EspecificacaoEscolaPrivada
 		{
 			public bool EscolaEFilantropica { get; set; }
 			public long NumCNPJEscolaPrivada { get; set; }
+			public EspecificacaoEscolaPrivada()
+			{
+
+			}
 		}
 		public class Indexer
 		{
 			public long Cod_Entidade { get; set; }
 			public short Ano { get; set; }
+			public Indexer()
+			{
+
+			}
 		}
 
 		[BsonId]
