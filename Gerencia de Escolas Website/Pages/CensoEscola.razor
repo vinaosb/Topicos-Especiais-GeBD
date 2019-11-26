@@ -30,7 +30,7 @@ else
 					<td>@modelItem.Ano</td>
 					<td>@getTel(modelItem)</td>
 					<td>@modelItem.CodEntidadeNavigation.CorreioEletronico.FirstOrDefault()</td>
-					<td>@modelItem.Rede</td>
+					<td>@modelItem.Rede @if (@modelItem.Rede == "Privada"){ - @getCategoria(@modelItem.CodEntidade, @modelItem.Ano) }</td>
 				</tr>
 			}
 		</tbody>
@@ -48,9 +48,11 @@ else
 		censosEscolas = await CEService.GetAsync(Text);
 	}
 
-	private void getEscolaName(string codEscola,string ano)
+	private string getCategoria(string codEscola,string ano)
 	{
-
+		if(await CEService.GetAsync(Text)){
+		
+		}
 	}
 
 	private string getTel(API.SQL.Models.CensoEscola ce)
