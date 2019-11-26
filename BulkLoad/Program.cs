@@ -9,7 +9,7 @@ namespace BulkLoad
 {
     class Program
     {
-        static void Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
             // completamente otimizado
             List<Regiao> regioes = regiao();
@@ -29,7 +29,7 @@ namespace BulkLoad
 
             var count_endereço = 0;
             //passar por cada csv
-            var path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
+            var path = @"C:\Users\Vinicius\Downloads\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
             using (var reader = new StreamReader(path))
             {
                 for (int o = 0; o < 11; o++)
@@ -93,7 +93,6 @@ namespace BulkLoad
                     var sistema_S = values[33];
                     var senai = values[34];
                     var sesc = values[35];
-                    System.Console.WriteLine(sindicato);
 
                     var atual2 = new MantenedoraDaEscola(Cod_Entidade, empresa, sindicato, sistema_S, senai, sesc);
                     mantenedoras.Add(atual2);
@@ -183,11 +182,16 @@ namespace BulkLoad
 
                     atual7.MateriaisEspecificos.MaterialEspecificoNaoUtiliza = values[124].ToLower().Equals("sim") ? true : false; 
                     atual7.MateriaisEspecificos.MaterialEspecificoQuilombola = values[125].ToLower().Equals("sim") ? true : false; 
-                    atual7.MateriaisEspecificos.MaterialEspecificoIndigena = values[126].ToLower().Equals("sim") ? true : false; 
+                    atual7.MateriaisEspecificos.MaterialEspecificoIndigena = values[126].ToLower().Equals("sim") ? true : false;
 
-                    atual7.NumCNPJUnidadeExecutora = System.Convert.ToInt32(values[47]);
-                    atual7.EscolaPrivada.NumCNPJEscolaPrivada = System.Convert.ToInt32(values[46]);
-                    atual7.EscolaPrivada.EscolaEFilantropica = values[6].ToLower().Equals("particular") ? true: false;
+					if(values[47] != "")
+						atual7.NumCNPJUnidadeExecutora = System.Convert.ToInt64(values[47]);
+
+					if (values[46] != "")
+					{
+						atual7.EscolaPrivada.NumCNPJEscolaPrivada = System.Convert.ToInt64(values[46]);
+	                    atual7.EscolaPrivada.EscolaEFilantropica = values[6].ToLower().Equals("particular") ? true: false;
+					}
 
                     for (var i=38;i<46;i++) {
                         if (values[i].ToLower().Equals("sim")) {
@@ -375,73 +379,84 @@ namespace BulkLoad
                 }
             }
 
-            using(var sender = Sender<Regiao>("https://localhost:44390/api")){
+			Console.WriteLine("Sender");
+
+			/*
+			using (Sender<Regiao> sender = new Sender<Regiao>("https://localhost:44309/")){
                 foreach(Regiao atual in regioes){
-                    sender.Post(atual,"Regioes");
+					_ = await sender.Post(atual,"api/Regioes");
                 }
-            }
-
-            using(var sender = Sender<Estado>("https://localhost:44390/api")){
+			}
+			Console.WriteLine("Regiao");
+			*/
+			using (var sender = new Sender<Estado>("https://localhost:44309/")){
                 foreach(Estado atual in estados){
-                    sender.Post(atual,"Estados");
+					_ = await sender.Post(atual, "api/Estados");
                 }
-            }
+			}
+			Console.WriteLine("Estados");
 
-            using(var sender = Sender<Municipio>("https://localhost:44390/api")){
+			using (var sender = new Sender<Municipio>("https://localhost:44309/")){
                 foreach(Municipio atual in municipios){
-                    sender.Post(atual,"Municipios");
+					_ = await sender.Post(atual, "api/Municipios");
                 }
-            }
+			}
+			Console.WriteLine("Muni");
 
-            using(var sender = Sender<Endereco>("https://localhost:44390/api")){
+			using (var sender = new Sender<Endereco>("https://localhost:44309/")){
                 foreach(Endereco atual in enderecos){
-                    sender.Post(atual,"Enderecos");
+					_ = await sender.Post(atual, "api/Enderecos");
                 }
-            }
+			}
+			Console.WriteLine("Ende");
 
-            using(var sender = Sender<MantenedoraDaEscola>("https://localhost:44390/api")){
+			using (var sender = new Sender<MantenedoraDaEscola>("https://localhost:44309/")){
                 foreach(MantenedoraDaEscola atual in mantenedoras){
-                    sender.Post(atual,"MantenedorasDasEscolas");
+					_ = await sender.Post(atual, "api/MantenedorasDasEscolas");
                 }
-            }
+			}
+			Console.WriteLine("Mant");
 
-            using(var sender = Sender<Escola>("https://localhost:44390/api")){
-                foreach(Escola atual in escolas){
-                    sender.Post(atual,"Escolas");
-                }
-            }
-
-            using(var sender = Sender<Escola>("https://localhost:44390/api")){
-                foreach(Escola atual in escolas){
-                    sender.Post(atual,"Escolas");
-                }
-            }
-
-            using(var sender = Sender<CensoEscola>("https://localhost:44390/api")){
-                foreach(CensoEscola atual in censoEscolas){
-                    sender.Post(atual,"CensoEscolas");
-                }
-            }
-
-            using(var sender = Sender<CorreioEletronico>("https://localhost:44390/api")){
+			using (var sender = new Sender<CorreioEletronico>("https://localhost:44309/")){
                 foreach(CorreioEletronico atual in emails){
-                    sender.Post(atual,"CorreioEletronico");
+					_ = await sender.Post(atual, "api/CorreioEletronico");
                 }
-            }
+			}
+			Console.WriteLine("Email");
 
-            using(var sender = Sender<Telefone>("https://localhost:44390/api")){
+			using (var sender = new Sender<Telefone>("https://localhost:44309/")){
                 foreach(Telefone atual in telefones){
-                    sender.Post(atual,"Telefones");
+                    _ = await sender.Post(atual, "api/Telefones");
                 }
-            }
-            using(var sender = Sender<ExtrasDaEscola>("https://localhost:44390/api")){
-                foreach(ExtrasDaEscola atual in mongo){
-                    sender.Post(atual,"Mongo");
-                }
-            }
-            
+			}
+			Console.WriteLine("Tel");
+			using (var sender = new Sender<Escola>("https://localhost:44309/"))
+			{
+				foreach (Escola atual in escolas)
+				{
+					_ = await sender.Post(atual, "api/Escolas");
+				}
+			}
+			Console.WriteLine("Escolas");
 
-            path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\escolas_media_alunos_turma_2010.xls";
+			using (var sender = new Sender<CensoEscola>("https://localhost:44309/"))
+			{
+				foreach (CensoEscola atual in censoEscolas)
+				{
+					_ = await sender.Post(atual, "api/CensoEscolas");
+				}
+			}
+			Console.WriteLine("Censo");
+
+			using (var sender = new Sender<ExtrasDaEscola>("https://localhost:44390/")){
+                foreach(ExtrasDaEscola atual in mongo){
+					_ = await sender.Post(atual, "api/Mongo");
+                }
+			}
+			Console.WriteLine("Mongo");
+			
+
+			path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\escolas_media_alunos_turma_2010.xls";
             //Application excel = new Application();
             //Workbook wb = excel.Workbooks.Open(path);
         }

@@ -33,6 +33,9 @@ namespace API.SQL.Models
 		public short Ano { get; set; }
 		public long CodEntidade { get; set; }
 
+		public CensoEscola()
+		{
+		}
 
         public CensoEscola(string ano, string cod_Entidade, string iD_DEPENDENCIA_ADM, string dependencia_Administrativa, string rede, string dataInicioAnoLetivo, string dataFimAnoLetivo, string situacao_Funcionamento, string eF_Organizado_Em_Ciclos, string atividade_Complementar, string dOCUMENTO_REGULAMENTACAO, string aCESSIBILIDADE, string dEPENDENCIAS_PNE, string sANITARIO_PNE, string aEE, string nUM_SALAS_EXISTENTES, string nUM_SALAS_UTILIZADAS, string nUM_SALA_LEITURA, string nUM_FUNCIONARIOS, string eDUCACAO_INDIGENA, string lINGUA_INDIGENA, string lINGUA_PORTUGUESA, string eSPACO_TURMA_PBA, string aBRE_FINAL_SEMANA, string mOD_ENS_REGULAR, string mOD_EDUC_ESPECIAL, string mOD_EJA)
         {
@@ -60,10 +63,13 @@ namespace API.SQL.Models
             SanitariosPne = sANITARIO_PNE;
             Aee = aEE;
 
-            NumSalasExistentes = System.Convert.ToInt64(nUM_SALAS_EXISTENTES);
-            NumSalasUsadas = System.Convert.ToInt64(nUM_SALAS_UTILIZADAS);
+			if (nUM_SALAS_EXISTENTES != "")
+				NumSalasExistentes = System.Convert.ToInt64(nUM_SALAS_EXISTENTES);
+			if(nUM_SALAS_UTILIZADAS != "")
+				NumSalasUsadas = System.Convert.ToInt64(nUM_SALAS_UTILIZADAS);
             NumSalasLeitura = nUM_SALA_LEITURA.ToLower().Equals("sim") ? 1 : 0; ;
-            NumFuncionarios = System.Convert.ToInt64(nUM_FUNCIONARIOS);
+			if(nUM_FUNCIONARIOS != "")
+				NumFuncionarios = System.Convert.ToInt64(nUM_FUNCIONARIOS);
 
             EducacaoIndigena = eDUCACAO_INDIGENA.ToLower().Equals("sim") ? true : false; 
             LinguaIndigena = lINGUA_INDIGENA.ToLower().Equals("sim") ? true : false;

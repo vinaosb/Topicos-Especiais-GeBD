@@ -10,7 +10,7 @@ namespace API.SQL.Models
 			Municipio = new HashSet<Municipio>();
 		}
 
-        public Estado(string cod_Estado, long cod_Regiao, string nome_Estado)
+        public Estado(string cod_Estado, short cod_Regiao, string nome_Estado)
         {
             CodEstado = System.Convert.ToInt64(cod_Estado);
             CodRegiao = cod_Regiao;
@@ -20,7 +20,7 @@ namespace API.SQL.Models
         public long CodEstado { get; set; }
 		public string Uf { get; set; }
 		public string NomeEstado { get; set; }
-		public long CodRegiao { get; set; }
+		public short CodRegiao { get; set; }
 		
 
 		public virtual Regiao CodRegiaoNavigation { get; set; }

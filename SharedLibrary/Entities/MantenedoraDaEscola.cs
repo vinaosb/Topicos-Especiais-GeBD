@@ -11,6 +11,11 @@ namespace API.SQL.Models
 		public bool Senai { get; set; }
 		public bool Sesc { get; set; }
 
+		public MantenedoraDaEscola()
+		{
+
+		}
+
         public MantenedoraDaEscola(string cod_Entidade, string empresa, string sindicato, string sistema_S, string senai, string sesc)
         {
             CodEntidade = System.Convert.ToInt64(cod_Entidade);
@@ -20,7 +25,6 @@ namespace API.SQL.Models
             Senai = senai.ToLower().Equals("sim") ? true : false;
             Sesc = sesc.ToLower().Equals("sim") ? true : false;
             Empresa = empresa.ToLower().Equals("sim") ? true : false;
-            System.Console.WriteLine(Sindicato);
         }
 
         public virtual Escola CodEntidadeNavigation { get; set; }

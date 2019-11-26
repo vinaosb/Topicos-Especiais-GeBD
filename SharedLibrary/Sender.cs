@@ -8,15 +8,19 @@ using Newtonsoft.Json;
 
 namespace SharedLibrary
 {
-	public class Sender<T>
+	public class Sender<T> : IDisposable
 	{
 		public HttpClient client = new HttpClient();
 		public Sender(string basePath)
 		{
 			client.BaseAddress = new Uri(basePath);
-			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(
 				new MediaTypeWithQualityHeaderValue("application/json"));
+		}
+
+		public void Dispose()
+		{
+			client.Dispose();
 		}
 
 		public async Task<List<T>> Get(string path)
@@ -64,6 +68,7 @@ namespace SharedLibrary
 				ret = JsonConvert.DeserializeObject<T>(result);
 			}
 
+			Console.WriteLine(ret.ToString());
 			return ret;
 		}
 	}

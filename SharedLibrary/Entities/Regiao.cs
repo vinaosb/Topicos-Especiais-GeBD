@@ -12,11 +12,11 @@ namespace API.SQL.Models
 
         public Regiao(string cod_Regiao, string nome_Regiao)
         {
-            CodRegiao = System.Convert.ToInt64(cod_Regiao);
+            CodRegiao = System.Convert.ToInt16(cod_Regiao);
             NomeRegiao = nome_Regiao;
         }
 
-        public long CodRegiao { get; set; }
+        public short CodRegiao { get; set; }
 		public string NomeRegiao { get; set; }
 		
 

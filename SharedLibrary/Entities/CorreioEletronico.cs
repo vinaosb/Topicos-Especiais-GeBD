@@ -8,6 +8,11 @@ namespace API.SQL.Models
 		public short Ano { get; set; }
 		public string Email { get; set; }
 
+		public CorreioEletronico()
+		{
+
+		}
+
         public CorreioEletronico(string cod_Entidade, string ano, string email)
         {
             CodEntidade = System.Convert.ToInt64(cod_Entidade);

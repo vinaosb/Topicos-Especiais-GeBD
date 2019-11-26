@@ -49,7 +49,7 @@ namespace SharedLibrary.Entities.Custom
 		public class EspecificacaoEscolaPrivada
 		{
 			public bool EscolaEFilantropica { get; set; }
-			public int NumCNPJEscolaPrivada { get; set; }
+			public long NumCNPJEscolaPrivada { get; set; }
 		}
 		public class Indexer
 		{
@@ -64,7 +64,7 @@ namespace SharedLibrary.Entities.Custom
 		public List<EquipamentosDaEscola> Equipamentos { get; set; }
 		public MateriaisDidaticosEspecificos MateriaisEspecificos { get; set; }
 		public List<string> DependenciasDaEscola { get; set; }
-		public int NumCNPJUnidadeExecutora { get; set; }
+		public long NumCNPJUnidadeExecutora { get; set; }
 		public List<string> ServicosDaEscola { get; set; }
 		public EspecificacaoEscolaPrivada EscolaPrivada { get; set; }
 
@@ -75,6 +75,9 @@ namespace SharedLibrary.Entities.Custom
             Equipamentos = new List<EquipamentosDaEscola>();
             DependenciasDaEscola = new List<string>();
             ServicosDaEscola = new List<string>();
-        }
+			MateriaisEspecificos = new ExtrasDaEscola.MateriaisDidaticosEspecificos();
+			ID = new ExtrasDaEscola.Indexer();
+			EscolaPrivada = new EspecificacaoEscolaPrivada();
+		}
     }
 }
