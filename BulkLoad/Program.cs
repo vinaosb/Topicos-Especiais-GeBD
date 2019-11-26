@@ -13,6 +13,7 @@ namespace BulkLoad
         {
             // completamente otimizado
             List<Regiao> regioes = regiao();
+            
             List<String> estados_cod = new List<String>();
             List<Estado> estados = new List<Estado>();
             List<String> municipio_cod = new List<String>();
@@ -29,7 +30,7 @@ namespace BulkLoad
 
             var count_endereço = 0;
             //passar por cada csv
-            var path = @"C:\Users\Vinicius\Downloads\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
+            var path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\CADASTRO_MATRICULAS_REGIAO_NORTE_2012.csv";
             using (var reader = new StreamReader(path))
             {
                 for (int o = 0; o < 11; o++)
@@ -57,8 +58,35 @@ namespace BulkLoad
                         //recomendo fazer consulta
                         var Cod_Regiao = regioes.Find(c => (c.NomeRegiao == values[8].ToLower())).CodRegiao;
                         var Nome_Estado = values[10];
-                        //var UF = vem do outro csv
-                        //Console.WriteLine(Nome_Estado);
+                        var UF = "GG";
+                        switch (Nome_Estado)
+                        {
+                            case "Rondonia":
+                                UF = "RO";
+                                break;
+                            case "Acre":
+                                UF = "AC";
+                                break;
+                            case "Amazonas":
+                                UF = "AM";
+                                break;
+                            case "Roraima":
+                                UF = "RR";
+                                break;
+                            case "Para":
+                                UF = "PA";
+                                break;
+                            case "Amapa":
+                                UF = "AP";
+                                break;
+                            case "Tocantins":
+                                UF = "TO";
+                                break;
+
+                        }
+
+                                                                                                                                           Tocantins
+                        Console.WriteLine(Nome_Estado);
                         var atual = new Estado(Cod_Estado, Cod_Regiao, Nome_Estado);
                         estados.Add(atual);
                     }
@@ -70,8 +98,6 @@ namespace BulkLoad
                         municipio_cod.Add(Cod_Municipio);
                         var PK_COD_MUNICIPIO_OLD = values[13];
                         var Nome_Municipio = values[11];
-                        //var UF = vem do outro csv
-                        //Console.WriteLine(Nome_Municipio);
                         var atual = new Municipio(Cod_Municipio, Cod_Estado, PK_COD_MUNICIPIO_OLD, Nome_Municipio);
                         municipios.Add(atual);
                     }
