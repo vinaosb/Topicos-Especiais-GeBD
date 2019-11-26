@@ -407,21 +407,21 @@ namespace BulkLoad
 
 			Console.WriteLine("Sender");
 
-			/*
+			
 			using (Sender<Regiao> sender = new Sender<Regiao>("https://localhost:44309/")){
                 foreach(Regiao atual in regioes){
 					_ = await sender.Post(atual,"api/Regioes");
                 }
 			}
 			Console.WriteLine("Regiao");
-			*/
+			
 			using (var sender = new Sender<Estado>("https://localhost:44309/")){
                 foreach(Estado atual in estados){
 					_ = await sender.Post(atual, "api/Estados");
                 }
 			}
 			Console.WriteLine("Estados");
-
+			
 			using (var sender = new Sender<Municipio>("https://localhost:44309/")){
                 foreach(Municipio atual in municipios){
 					_ = await sender.Post(atual, "api/Municipios");
@@ -435,6 +435,15 @@ namespace BulkLoad
                 }
 			}
 			Console.WriteLine("Ende");
+			
+			using (var sender = new Sender<Escola>("https://localhost:44309/"))
+			{
+				foreach (Escola atual in escolas)
+				{
+					_ = await sender.Post(atual, "api/Escolas");
+				}
+			}
+			Console.WriteLine("Escolas");
 
 			using (var sender = new Sender<MantenedoraDaEscola>("https://localhost:44309/")){
                 foreach(MantenedoraDaEscola atual in mantenedoras){
@@ -456,14 +465,6 @@ namespace BulkLoad
                 }
 			}
 			Console.WriteLine("Tel");
-			using (var sender = new Sender<Escola>("https://localhost:44309/"))
-			{
-				foreach (Escola atual in escolas)
-				{
-					_ = await sender.Post(atual, "api/Escolas");
-				}
-			}
-			Console.WriteLine("Escolas");
 
 			using (var sender = new Sender<CensoEscola>("https://localhost:44309/"))
 			{
