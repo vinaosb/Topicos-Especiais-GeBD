@@ -41,7 +41,7 @@ namespace Gerencia_de_Escolas_Website.Data
 			return censosEscolas.ToArray();
 		}
 
-        public string Get(int id)
+		public string Get(int id)
         {
             return "value";
         }
