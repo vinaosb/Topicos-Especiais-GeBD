@@ -406,7 +406,7 @@ namespace BulkLoad
 
 			Console.WriteLine("Sender");
 
-			/*
+			
 			using (Sender<Regiao> sender = new Sender<Regiao>("https://localhost:44309/")){
                 foreach(Regiao atual in regioes){
 					_ = await sender.Post(atual,"api/Regioes");
@@ -451,13 +451,13 @@ namespace BulkLoad
 				_ = await sender.Post(emails, "api/CorreioEletronico/bulk");
 			}
 			Console.WriteLine("Email");
-
+			
 			using (var sender = new Sender<List<Telefone>>("https://localhost:44309/"))
 			{
 				_ = await sender.Post(telefones, "api/Telefones/bulk");
 			}
 			Console.WriteLine("Tel");
-
+			
 			using (var sender = new Sender<List<CensoEscola>>("https://localhost:44309/"))
 			{
 				_ = await sender.Post(censoEscolas, "api/CensoEscolas/bulk");
@@ -475,7 +475,7 @@ namespace BulkLoad
 				_ = await sender.Post(mongo.GetRange(last, mongo.Count-last), "api/Mongo/bulk");
 			}
 			Console.WriteLine("Mongo");
-			*/
+			
 
 			path = @"C:\Users\Eduardo\Documents\ufsc\bdOPT\Populate\Populate\escolas_media_alunos_turma_2010.xls";
             //Application excel = new Application();

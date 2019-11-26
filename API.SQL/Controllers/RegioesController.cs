@@ -27,7 +27,7 @@ namespace API.SQL.Controllers
 
 		// GET: api/Regioes/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Regiao>> GetRegiao(long id)
+		public async Task<ActionResult<Regiao>> GetRegiao(short id)
 		{
 			var regiao = await _context.Regiao.FindAsync(id);
 
@@ -43,7 +43,7 @@ namespace API.SQL.Controllers
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
 		// more details see https://aka.ms/RazorPagesCRUD.
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutRegiao(long id, Regiao regiao)
+		public async Task<IActionResult> PutRegiao(short id, Regiao regiao)
 		{
 			if (id != regiao.CodRegiao)
 			{
@@ -99,7 +99,7 @@ namespace API.SQL.Controllers
 
 		// DELETE: api/Regioes/5
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<Regiao>> DeleteRegiao(long id)
+		public async Task<ActionResult<Regiao>> DeleteRegiao(short id)
 		{
 			var regiao = await _context.Regiao.FindAsync(id);
 			if (regiao == null)
@@ -113,7 +113,7 @@ namespace API.SQL.Controllers
 			return regiao;
 		}
 
-		private bool RegiaoExists(long id)
+		private bool RegiaoExists(short id)
 		{
 			return _context.Regiao.Any(e => e.CodRegiao == id);
 		}

@@ -8,35 +8,40 @@ using API.SQL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SharedLibrary;
 
 namespace Gerencia_de_Escolas_Website.Data
 {
     public class EscolasService
 	{
 		public List<Escola> escolas { get; set; }
-		public HttpClient client = new HttpClient();
-		public string path = "https://localhost:44309/api/";
+		public string path = "https://localhost:44309/";
 
 		public EscolasService()
 		{
-			client.BaseAddress = new Uri(path);
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(
-				new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 
-		public async Task<Escola[]> GetAsync()
+		public async Task<Escola[]> GetAsync(int index = 0)
 		{
-			var response = await client.GetAsync("Escolas");
-
-
-			if (response.IsSuccessStatusCode)
+			List<Escola> t;
+			using (Sender<Escola> s = new Sender<Escola>(path))
 			{
-				var result = await response.Content.ReadAsStringAsync();
-				escolas = JsonConvert.DeserializeObject<List<Escola>>(result);
+				t = await s.Get("api/Escolas");
+				t = t.GetRange(index * 5, 5);
 
+				foreach (var e in t)
+				{
+					using (Sender<Endereco> ss = new Sender<Endereco>(path))
+						e.CodEnderecoNavigation = await ss.Get("api/Enderecos", e.CodEndereco.ToString());
+					using (Sender<Municipio> ss = new Sender<Municipio>(path))
+						e.CodEnderecoNavigation.CodMunicipioNavigation = await ss.Get("api/Municipios", e.CodEnderecoNavigation.CodMunicipio.ToString());
+					using (Sender<Estado> ss = new Sender<Estado>(path))
+						e.CodEnderecoNavigation.CodMunicipioNavigation.CodEstadoNavigation = await ss.Get("api/Estados", e.CodEnderecoNavigation.CodMunicipioNavigation.CodEstado.ToString());
+					using (Sender<Regiao> ss = new Sender<Regiao>(path))
+						e.CodEnderecoNavigation.CodMunicipioNavigation.CodEstadoNavigation.CodRegiaoNavigation = await ss.Get("api/Regioes", e.CodEnderecoNavigation.CodMunicipioNavigation.CodEstadoNavigation.CodRegiao.ToString());
+				}
 			}
-			return escolas.ToArray();
+			return t.ToArray();
 		}
 	}
 }

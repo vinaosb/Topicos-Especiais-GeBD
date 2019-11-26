@@ -17,46 +17,69 @@ else
 			<tr>
 				<th>Nome da Entidade</th>
 				<th>Ano</th>
-				<th>Telefone</th>
 				<th>Email</th>
 				<th>Rede</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var modelItem in censosEscolas)
-			{
+			@foreach (var modelItem in censosEscolas) {
 				<tr>
 					<td>@modelItem.CodEntidadeNavigation.Nome</td>
 					<td>@modelItem.Ano</td>
-					<td>@getTel(modelItem)</td>
-					<td>@modelItem.CodEntidadeNavigation.CorreioEletronico.FirstOrDefault()</td>
-					<td>@modelItem.Rede @if (@modelItem.Rede == "Privada"){ - @getCategoria(@modelItem.CodEntidade, @modelItem.Ano) }</td>
+					<td>@getEmail(modelItem)</td>
+					<td>@modelItem.Rede</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 }
+@if (Text == null)
+{
+	<button @onclick="Clicked">Próxima Pagina</button>
+}
 
 
 @code {
-	API.SQL.Models.CensoEscola[] censosEscolas;
+		API.SQL.Models.CensoEscola[] censosEscolas;
 	[Parameter]
 	public string Text { get; set; }
+	public int Index { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
-		censosEscolas = await CEService.GetAsync(Text);
-	}
-
-	private string getCategoria(string codEscola,string ano)
-	{
-		if(await CEService.GetAsync(Text)){
-		
+		Index = 0;
+		censosEscolas = await CEService.GetAsync(Text, Index);
+		foreach (var ce in censosEscolas)
+		{
+			ce.Rede = await getCategoria(ce.Rede, ce.Ano, ce.CodEntidade);
 		}
 	}
 
-	private string getTel(API.SQL.Models.CensoEscola ce)
+	protected async Task Clicked()
 	{
-		return ce.CodEntidadeNavigation.Telefone.FirstOrDefault().Ddd.ToString() + ce.CodEntidadeNavigation.Telefone.FirstOrDefault().Numero.ToString();
+		Index++;
+		censosEscolas = null;
+		censosEscolas = await CEService.GetAsync(Text, Index);
+		foreach (var ce in censosEscolas)
+		{
+			ce.Rede = await getCategoria(ce.Rede, ce.Ano, ce.CodEntidade);
+		}
+	}
+
+	private async Task<string> getCategoria(string rede, short ano, long codEscola)
+	{
+		if (rede.ToLower().Equals("privada"))
+		{
+			var t = await CEService.GetExtras(ano.ToString() + "/" + codEscola.ToString());
+			string ret = t[0].EscolaPrivada.EscolaEFilantropica ? "Filantropica" : "Particular";
+			return ret;
+		}
+		return rede;
+	}
+
+	private string getEmail(API.SQL.Models.CensoEscola ce)
+	{
+		string ret = ce.CodEntidadeNavigation.CorreioEletronico.Count > 0 ? ce.CodEntidadeNavigation.CorreioEletronico.FirstOrDefault().Email : "";
+		return ret;
 	}
 }
