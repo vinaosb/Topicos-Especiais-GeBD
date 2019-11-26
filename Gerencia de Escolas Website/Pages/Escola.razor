@@ -17,6 +17,7 @@ else
 			<tr>
 				<th>Codigo da Entidade</th>
 				<th>Nome da Entidade</th>
+				<th>Região</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -25,6 +26,7 @@ else
 				<tr>
 					<td>@modelItem.CodEntidade</td>
 					<td>@modelItem.Nome</td>
+					<th>Região</th>
 					<td><button class="btn btn-primary" @onclick="@(e => NavigateToCensoEscola(modelItem.CodEntidade.ToString()))">Details</button></td>
 				</tr>
 			}

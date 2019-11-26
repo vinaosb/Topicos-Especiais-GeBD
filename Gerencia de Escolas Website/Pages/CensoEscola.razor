@@ -15,16 +15,22 @@ else
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Codigo da Entidade</th>
+				<th>Nome da Entidade</th>
 				<th>Ano</th>
+				<th>Telefone</th>
+				<th>Email</th>
+				<th>Rede</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var modelItem in censosEscolas)
 			{
 				<tr>
-					<td>@modelItem.CodEntidade</td>
+					<td>escola.nome</td>
 					<td>@modelItem.Ano</td>
+					<td>telefone</td>
+					<td>email</td>
+					<td>@modelItem.Rede</td>
 				</tr>
 			}
 		</tbody>
@@ -40,5 +46,10 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		censosEscolas = await CEService.GetAsync(Text);
+	}
+
+	private void getEscolaName(string codEscola,string ano)
+	{	
+
 	}
 }
